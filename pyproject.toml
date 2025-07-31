@@ -1,0 +1,100 @@
+# This is the standard configuration file for Python packages.
+# It replaced setup.py in modern Python packaging.
+
+# Build system configuration.
+# This specifies the tools used to build the package.
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+# Project metadata.
+# This section contains all the information about your package.
+[project]
+name = "pyqe"
+version = "0.1.0"
+authors = [
+    { name="Shibu Meher", email="shibumeher@iisc.ac.in" },
+]
+description = "A Python library for pre and post-processing of Quantum ESPRESSO calculations."
+readme = "README.md"
+requires-python = ">=3.8"
+keywords = ["quantum-espresso", "computational-chemistry", "materials-science", "physics"]
+license = { text = "MIT License" }
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Scientific/Engineering :: Chemistry",
+]
+
+# Add any necessary dependencies for your library here.
+# I've included some common ones for scientific computing.
+dependencies = [
+    "numpy>=1.22",
+    "scipy>=1.8",
+    "matplotlib>=3.5",
+    "pydantic>=2.0",
+    # If your package interacts with other QE tools, add them here.
+    # For example: "ase-espresso", "qepy" etc.
+]
+
+# This is a good place to list optional dependencies.
+# For example, dependencies needed for documentation or testing.
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov",
+    "black>=22.3",
+    "pylint>=2.13",
+    "pre-commit",
+    "mkdocs-material",
+]
+
+# Package discovery.
+# This tells setuptools how to find your package's modules.
+[tool.setuptools.packages.find]
+where = ["src"] # Assumes your code is in a directory named 'src'
+include = ["pyqe*"] # Only include the 'pyqe' package
+
+# Tooling configuration.
+# You can configure various development tools in this section.
+# This example uses Black, a popular code formatter.
+[tool.black]
+line-length = 88
+target-version = ['py38']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+# Configuration for Pylint, a static code analyzer.
+# You can add or remove checks here.
+[tool.pylint.master]
+ignore-paths = [
+    "docs",
+    "tests",
+]
+
+[tool.pylint.messages_control]
+disable = [
+    "C0114", # Missing module docstring
+    "C0115", # Missing class docstring
+    "C0116", # Missing function docstring
+    "E0401", # Unable to import
+]
+
+[tool.pylint.format]
+max-line-length = 88
