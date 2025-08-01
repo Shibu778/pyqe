@@ -1,14 +1,7 @@
-# This is the standard configuration file for Python packages.
-# It replaced setup.py in modern Python packaging.
-
-# Build system configuration.
-# This specifies the tools used to build the package.
 [build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
-# Project metadata.
-# This section contains all the information about your package.
 [project]
 name = "pyqe"
 version = "0.1.0"
@@ -30,15 +23,14 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Chemistry",
 ]
 
-# Add any necessary dependencies for your library here.
-# I've included some common ones for scientific computing.
 dependencies = [
     "numpy>=1.22",
     "scipy>=1.8",
     "matplotlib>=3.5",
     "pydantic>=2.0",
-    # If your package interacts with other QE tools, add them here.
-    # For example: "ase-espresso", "qepy" etc.
+    "ase>=3.25.0",
+    "click>=8.2.1",
+    "xmltodict>=0.14.2"
 ]
 
 # This is a good place to list optional dependencies.
@@ -58,6 +50,10 @@ dev = [
 [tool.setuptools.packages.find]
 where = ["src"] # Assumes your code is in a directory named 'src'
 include = ["pyqe*"] # Only include the 'pyqe' package
+
+# Commandline interface
+[project.scripts]
+pyqe = "pyqe.cli:cli"
 
 # Tooling configuration.
 # You can configure various development tools in this section.

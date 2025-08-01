@@ -5,10 +5,7 @@ from ase import Atoms
 from ase.constraints import FixAtoms
 from ase.io import read, write
 
-# unit conversion
-bohr2ang = 0.529177
-
-def xml2json(input_file, output_file):
+def xml2json(input_file, output_file, save=False):
   # Load XML file
   with open(input_file, 'r', encoding='utf-8') as f:
       xml_content = f.read()
@@ -17,9 +14,18 @@ def xml2json(input_file, output_file):
   data_dict = xmltodict.parse(xml_content)
   
   # Save as JSON
-  with open(output_file, 'w', encoding='utf-8') as f:
+  if save:
+    with open(output_file, 'w', encoding='utf-8') as f:
       json.dump(data_dict, f, indent=4)
-  print("XML to JSON conversion successful!!")
+    print("XML to JSON conversion successful!!")
+  return data_dict
+
+def xml2dict(input_file):
+  with open(input_file, 'r', encoding='utf-8') as f:
+      xml_content = f.read()
+
+  # Convert to dictionary
+  data_dict = xmltodict.parse(xml_content)
   return data_dict
 
 def extract_last_structure(data, pbc = True, constrain=False):
@@ -42,9 +48,15 @@ def extract_last_structure(data, pbc = True, constrain=False):
     atoms.set_constraint(constraint)
   return atoms
 
-def atoms2poscar(atoms, name="POSCAR_relaxed.vasp"):
-  write(name, atoms, format='vasp')
-  print(f"Atoms object written to {name}!!")
+def atoms2poscar(atoms, name="POSCAR_relaxed.vasp", format="vasp"):
+  write(name, atoms, format=format)
+  print(f"Atoms object written to {name} in {format} format!!")
+
+def xml2laststruct(input_file, filename, pbc=True, constrain = False, format="vasp"):
+  data = xml2dict(input_file)
+  atoms = extract_last_structure(data, constrain=constrain, pbc=pbc)
+  atoms2poscar(atoms, filename, format=format)
+ 
 
 if __name__ == "__main__":
   input_file = "pbe.xml"
