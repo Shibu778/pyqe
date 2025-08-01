@@ -1,4 +1,7 @@
 # Set of inputs for work
+
+# input1: Basic inputs for relaxing a slab model using PBE functional, DFT-D3 dispersion correction, and ONCV_PBE pseudopotentials.
+# This input set is suitable for slab models with a vacuum layer.
 input1 = {
     "calculation": "relax",
     "restart_mode": "from_scratch",
