@@ -1,9 +1,10 @@
 # src/pyqe/defaults.py
 # Default settings and constants for the PyQE package
 import yaml
+from pathlib import Path
 
 
-def load_config(config_file="../../config.yaml"):
+def load_config(config_file):
     """Loads configuration from a YAML file."""
     with open(config_file, "r") as f:
         config = yaml.safe_load(f)
@@ -11,7 +12,8 @@ def load_config(config_file="../../config.yaml"):
 
 
 # Load the configuration at the start of your script
-config = load_config()
+config_file = Path(__file__).parent.resolve() / "../../config.yaml"
+config = load_config(config_file)
 
 # Now you can use the values from the config file
 pseudo_directory = config["paths"]["pseudo_dir"]
