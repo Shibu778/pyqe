@@ -1,0 +1,68 @@
+# =======================================================
+# Quantum ESPRESSO Input for a 'relax' Calculation
+# This template is in YAML format for clarity and can be
+# converted to the standard QE namelist format.
+# =======================================================
+
+# &control namelist: General control parameters for the run
+control:
+  calculation: 'relax'        # Type of calculation: 'scf', 'relax', 'vc-relax', 'md'
+  restart_mode: 'from_scratch'# Start from scratch or restart from a previous run
+  prefix: 'pyqe'       # A name for the run
+  outdir: './'         # Output directory for files and wavefunctions
+  pseudo_dir: ''     # Directory containing pseudopotential files
+  tprnfor: .true.             # Print forces on atoms
+  tstress: .true.             # Print stress tensor
+  disk_io: 'low'              # Reduce disk I/O, useful for large systems
+
+# &system namelist: Physical system properties
+system:
+  ibrav: 0                    # Bravais lattice index (2 = fcc, -3 = hex, etc.)
+  nat: None                      # Number of atoms in the cell
+  ntyp: None                     # Number of different atom types
+  ecutwfc: 50.0               # Plane-wave cutoff energy for wavefunctions (Ry)
+  ecutrho: 200.0              # Plane-wave cutoff energy for charge density (Ry)
+  occupations: 'smearing'     # Method to handle electron occupations
+  smearing: 'marzari-vanderbilt' # Smearing type for metals
+  degauss: 0.01               # Smearing width (Ry)
+  nspin: 1                    # Spin polarization (1 = non-magnetic, 2 = spin-polarized)
+
+# &electrons namelist: Electronic minimization
+electrons:
+  electron_maxstep: 100       # Maximum number of electronic steps
+  mixing_mode: 'plain'        # Charge density mixing scheme
+  mixing_beta: 0.7            # Mixing parameter
+  conv_thr: 1.0e-8            # Convergence threshold for scf loop (Ry)
+
+# &ions namelist: Ionic positions minimization (for relax)
+ions:
+  ion_dynamics: 'bfgs'        # Type of ionic minimization: 'bfgs', 'cg'
+  ion_positions: 'default'    # Ionic positions handling during relaxation
+  upsetting: 0.1              # Displacement for finite-difference calculation of forces
+  
+# =======================================================
+# Atomic positions and cell parameters
+# These sections are not namelists but are critical parts of the input file.
+# =======================================================
+atomic_species:
+- species: 'Si'               # Name of the species
+  mass: 28.0855               # Atomic mass (amu)
+  pseudo: 'Si.pbe-n-rrkjus_psl.1.0.0.upf' # Pseudopotential file name
+
+atomic_positions: 'crystal'   # Coordinates system: 'crystal', 'bohr', 'angstrom'
+- symbol: 'Si'
+  x: 0.0
+  y: 0.0
+  z: 0.0
+- symbol: 'Si'
+  x: 0.25
+  y: 0.25
+  z: 0.25
+
+k_points: 'automatic'         # K-point grid generation
+  nk1: 4
+  nk2: 4
+  nk3: 4
+  shift1: 0
+  shift2: 0
+  shift3: 0

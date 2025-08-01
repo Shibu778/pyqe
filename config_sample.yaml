@@ -1,0 +1,4 @@
+# config.yaml
+paths:
+  pseudo_dir: "/path/to/your/pseudopotentials"
+  output_dir: "./output/"
