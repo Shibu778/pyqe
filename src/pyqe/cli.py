@@ -129,21 +129,8 @@ def genpw_cmd(structure, input_yaml, output):
     with open(input_yaml, "r") as f:
         input_dict = yaml.safe_load(f)
 
-    if structure.endswith(".xyz"):
-        # If the structure is an XYZ file, extract the last structure
-        print(
-            "The given structure is an XYZ file. Lattice Parameters will be set to 0.0 in pw.in."
-        )
-        a = input("Enter lattice parameter a (in Angstroms): ")
-        cubic = input("Do you want to set cubic lattice? (yes/no): ").strip().lower()
-        if cubic == "yes":
-            b = c = a
-        else:
-            b = input("Enter lattice parameter b (in Angstroms): ")
-            c = input("Enter lattice parameter c (in Angstroms): ")
-
     input_dict = input_dict.get("input", input_dict)  # Handle single or multiple inputs
-    inp = qe_input(structure, input_dict, cell=[[a, 0, 0], [0, b, 0], [0, 0, c]])
+    inp = qe_input(structure, input_dict)
     inp.write_input(output)
     click.echo(f"QE input written to {output} using {structure} and {input_yaml}")
 
