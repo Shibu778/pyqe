@@ -4,7 +4,9 @@ from ase import Atoms
 from ase.constraints import FixAtoms
 from ase.io import read, write
 from pyqe.defaults import bohr2ang
+from pyqe.input import qe_input
 import os
+import yaml
 
 
 def xml2json(input_file, output_file, save=False):
@@ -115,6 +117,29 @@ def conv_structure(
         if verbose:
             print(f"Error during conversion: {e}")
         return False
+
+
+@cli.command("genpw")
+@click.argument("structure", type=click.Path(exists=True))
+@click.argument("input_yaml", type=click.Path(exists=True))
+@click.argument("output", type=str, default="pw.in")
+def genpw_cmd(structure, input_yaml, output):
+    """
+    Generate Quantum ESPRESSO input from VASP POSCAR and YAML input file.
+
+    STRUCTURE: Path to Structure file
+    INPUT_YAML: Path to YAML file with QE input parameters
+    OUTPUT: Output QE input filename (default: pw.in)
+    """
+    from pyqe.input import qe_input
+
+    with open(input_yaml, "r") as f:
+        input_dict = yaml.safe_load(f)
+
+    input_dict = input_dict.get("input", input_dict)  # Handle single or multiple inputs
+    inp = qe_input(structure, input_dict)
+    inp.write_input(output)
+    click.echo(f"QE input written to {output} using {structure} and {input_yaml}")
 
 
 if __name__ == "__main__":
