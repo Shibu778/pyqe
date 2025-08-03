@@ -3,6 +3,8 @@ from pyqe.utils import xml2json, xml2laststruct  # Replace with actual function 
 from pyqe.defaults import ASE_FORMATS
 from pyqe.utils import conv_structure
 import os
+from pyqe.input import qe_input
+import yaml
 
 
 @click.group()
@@ -108,6 +110,29 @@ def conv_cmd(infile, outfile, in_fmt, out_fmt, overwrite):
         overwrite=overwrite,
     )
     click.echo(f"Converted {infile} ({in_fmt}) to {outfile} ({out_fmt})")
+
+
+@cli.command("genpw")
+@click.argument("structure", type=click.Path(exists=True))
+@click.argument("input_yaml", type=click.Path(exists=True))
+@click.argument("output", type=str, default="pw.in")
+def genpw_cmd(structure, input_yaml, output):
+    """
+    Generate Quantum ESPRESSO input from VASP POSCAR and YAML input file.
+
+    STRUCTURE: Path to Structure file
+    INPUT_YAML: Path to YAML file with QE input parameters
+    OUTPUT: Output QE input filename (default: pw.in)
+    """
+    from pyqe.input import qe_input
+
+    with open(input_yaml, "r") as f:
+        input_dict = yaml.safe_load(f)
+
+    input_dict = input_dict.get("input", input_dict)  # Handle single or multiple inputs
+    inp = qe_input(structure, input_dict)
+    inp.write_input(output)
+    click.echo(f"QE input written to {output} using {structure} and {input_yaml}")
 
 
 if __name__ == "__main__":
