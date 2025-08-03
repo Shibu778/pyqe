@@ -4,6 +4,7 @@ from ase import Atoms
 from ase.constraints import FixAtoms
 from ase.io import read, write
 from pyqe.defaults import bohr2ang
+import os
 
 
 def xml2json(input_file, output_file, save=False):
