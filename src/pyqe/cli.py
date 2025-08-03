@@ -64,48 +64,50 @@ def xml2json_cmd(input_file, output_file, save):
         click.echo(f"Converted {input_file} to JSON (not saved to file)")
 
 
-@cli.command()
-@click.argument("input_file", type=click.Path(exists=True))
-@click.argument("output_file", type=str)
+@cli.command("conv")  # Abbreviated command name
+@click.argument("infile", type=click.Path(exists=True))  # Abbreviated argument
+@click.argument("outfile", type=str)
 @click.option(
-    "--input-format",
+    "-if",
+    "--in-fmt",
     type=click.Choice(ASE_FORMATS, case_sensitive=False),
     required=True,
-    help="Format of the input structure file",
+    help="Input file format",
 )
 @click.option(
-    "--output-format",
+    "-of",
+    "--out-fmt",
     type=click.Choice(ASE_FORMATS, case_sensitive=False),
     required=True,
-    help="Format for the output structure file",
+    help="Output file format",
 )
 @click.option(
+    "-ow",
     "--overwrite/--no-overwrite",
     default=False,
-    help="Overwrite the output file if it exists (default: False)",
+    help="Overwrite output file if exists",
 )
-def conv_structure_cmd(input_file, output_file, input_format, output_format, overwrite):
+def conv_cmd(infile, outfile, in_fmt, out_fmt, overwrite):
     """
     Convert structure file between formats.
 
-    INPUT_FILE: Path to the input structure file
-    OUTPUT_FILE: Path to the output structure file
+    INFILE: Input structure file
+    OUTFILE: Output structure file
     """
-    if os.path.exists(output_file) and not overwrite:
+    if os.path.exists(outfile) and not overwrite:
         click.echo(
-            f"Error: {output_file} already exists. Use --overwrite to overwrite.",
+            f"Error: {outfile} already exists. Use -ow/--overwrite to overwrite.",
             err=True,
         )
         return
     conv_structure(
-        input_file,
-        output_file,
-        input_format=input_format,
-        output_format=output_format,
+        infile,
+        outfile,
+        inp_format=in_fmt,
+        out_format=out_fmt,
+        overwrite=overwrite,
     )
-    click.echo(
-        f"Converted {input_file} ({input_format}) to {output_file} ({output_format})"
-    )
+    click.echo(f"Converted {infile} ({in_fmt}) to {outfile} ({out_fmt})")
 
 
 if __name__ == "__main__":
