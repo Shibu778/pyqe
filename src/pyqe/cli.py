@@ -36,7 +36,7 @@ def xml2laststruct_cmd(input_file, filename, pbc, constrain, format):
     INPUT_FILE: Input XML file generated from pw.x calculation (prefix.xml)
     FILENAME: Output Structure filename to store the last structure
     """
-    xml2laststruct(input_file, filename, pbc=pbc, constrain=constrain)
+    xml2laststruct(input_file, filename, pbc=pbc, constrain=constrain, format=format)
     click.echo(
         f"Saved last structure from {input_file} to {filename} (pbc={pbc}, constrain={constrain})"
     )
