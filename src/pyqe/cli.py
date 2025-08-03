@@ -129,8 +129,9 @@ def genpw_cmd(structure, input_yaml, output):
     with open(input_yaml, "r") as f:
         input_dict = yaml.safe_load(f)
 
-    input_dict = input_dict.get("input", input_dict)  # Handle single or multiple inputs
-    inp = qe_input(structure, input_dict)
+    input_data = input_dict.get("input", input_dict)
+    kpts = input_dict.get("kpts", input_dict)
+    inp = qe_input(structure, input_data, kpts=kpts)
     inp.write_input(output)
     click.echo(f"QE input written to {output} using {structure} and {input_yaml}")
 

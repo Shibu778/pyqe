@@ -8,11 +8,12 @@ class qe_input:
     Base class for Quantum ESPRESSO input files.
     """
 
-    def __init__(self, structure_file, input_data, pseudopotentials=None):
+    def __init__(self, structure_file, input_data, pseudopotentials=None, kpts=None):
         self.structure_file = structure_file
         self.atoms = read(structure_file)
         self.pseudopotentials = self.get_pseudopotentials(pseudopotentials)
         self.input_data = self.update_input_data(input_data)
+        self.kpts = kpts
 
     def update_input_data(self, input_data):
         """
@@ -55,4 +56,5 @@ class qe_input:
             pseudopotentials=self.pseudopotentials,
             input_data=self.input_data,
             format="espresso-in",
+            kpts=self.kpts,  # Default to Gamma point
         )
