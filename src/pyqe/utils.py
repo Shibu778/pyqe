@@ -68,6 +68,54 @@ def xml2laststruct(input_file, filename, pbc=True, constrain=False, format="vasp
     atoms2poscar(atoms, filename, format=format)
 
 
+def conv_structure(
+    input_file,
+    output_file,
+    inp_format="vasp",
+    out_format="xyz",
+    overwrite=False,
+    verbose=True,
+):
+    """
+    Convert a structure file from one format to another using ASE.
+
+    Args:
+        input_file (str): Path to the input structure file.
+        output_file (str): Path to the output structure file.
+        inp_format (str): Format of the input file (default: "vasp").
+        out_format (str): Format of the output file (default: "xyz").
+        overwrite (bool): Overwrite output file if it exists (default: False).
+        verbose (bool): Print status messages (default: True).
+
+    Returns:
+        bool: True if conversion was successful, False otherwise.
+    """
+    if not os.path.isfile(input_file):
+        if verbose:
+            print(f"Input file '{input_file}' does not exist.")
+        return False
+
+    if os.path.exists(output_file) and not overwrite:
+        if verbose:
+            print(
+                f"Output file '{output_file}' already exists. Use overwrite=True to overwrite."
+            )
+        return False
+
+    try:
+        atoms = read(input_file, format=inp_format)
+        write(output_file, atoms, format=out_format)
+        if verbose:
+            print(
+                f"Structure converted from {inp_format} to {out_format} and saved as {output_file}."
+            )
+        return True
+    except Exception as e:
+        if verbose:
+            print(f"Error during conversion: {e}")
+        return False
+
+
 if __name__ == "__main__":
     input_file = "pbe.xml"
     output_file = "pbe.json"
